@@ -1,0 +1,78 @@
+#cloud-config
+# vim: syntax=yaml
+#
+---
+hostname: raspi3.pi.jeef.me
+manage_etc_hosts: true
+
+users:
+  - name: nick
+    gecos: "Nick Miller"
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users,docker,video,input
+    plain_text_passwd: password
+    lock_passwd: false
+    ssh_pwauth: true
+    chpasswd: {expire: false}
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8HzzyufjL8CeajU5AApZuWCcNdoHWMEn37j1EnCJoqvvb+/lmjH1YCKLNECGbDlI70psOStMPX7WFn+i52vvhbM94oT9eQya8y/0MKIHt4sPLxN66IBXfG2uPztHaxTLWfTCWwIi5La/rfA/Q3TDHv4HcX8Z1PI6e9RMu3saminOT3XC+Nr+EUVCiuF1dVqy0+02dRMLYN5+idt9IYDCtnXoQ64sUsIP/ubWi7Yj12YCEyY4ePLPRpo9QIDYdiB9u/HQtd9G5fvetAHG/hEVCBPiCqLDn5yMjw+f4xZ5tnprjsT6mX23qXMt6h7n80eT4tEM8lc15XH/nEPj6Sct5XnVz8+f5fcucmZK/kMqTJXyZ7IqEQlUzH9gJi3NE923Hr2yjlcpsx0wmjC+rC50tCuGI2fm9DUwGT3Dk1RCFSdqR+3QXx25P3PuCZZHliHqDjPI03srrK7v1Fqmp55d4R+dWC+o0hb3YKgBy2h6FKkAZXncZx+KtYT7SDKZJ+kJwFUn+CX8XdEujfguERdG7azYMI48Lsgb8AmwlYyo0rO/+GjRgn6SIXKJ+39reyLxjUSR8SvepsMQkEfM/zB9c+dcRjLWX8eyr51/IIM1LycoTWvf0hMN5c/JuoaY7ILTKSheV302H6JwMsdUZq40PpZKKZNiOsjVRW2vf2VqDOw== nick.miller@onyxpoint.com
+
+resize_rootfs: true
+growpart:
+  mode: auto
+  devices: ["/"]
+  ignore_growroot_disabled: false
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+locale: "en_US.UTF-8"
+timezone: "America/New_York"
+
+# # WiFi connect to HotSpot
+# To make wifi work with RPi3 and RPi0
+# you also have to set "enable_uart=0" in config.txt
+# See no-uart-config.txt for an example.
+#
+# # - use `wpa_passphrase SSID PASSWORD` to encrypt the psk
+write_files:
+  - content: |
+      allow-hotplug wlan0
+      iface wlan0 inet dhcp
+      wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+      iface default inet dhcp
+    path: /etc/network/interfaces.d/wlan0
+  - content: |
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+      update_config=1
+      network={
+      ssid="pi-net"
+      psk="somethingeasy"
+      proto=RSN
+      key_mgmt=WPA-PSK
+      pairwise=CCMP
+      auth_alg=OPEN
+      }
+    path: /etc/wpa_supplicant/wpa_supplicant.conf
+  - content: |
+      deb http://apt.kubernetes.io/ kubernetes-xenial main
+    path: /etc/apt/sources.list.d/kubernetes.list
+  - content: |
+      {
+        "labels": [ "os=linux", "arch=arm64" ],
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "experimental": true
+      }
+    path: "/etc/docker/daemon.json"
+    owner: "root:root"
+# These commands will be ran once on first boot only
+runcmd:
+  # Pickup the hostname changes
+  - 'systemctl restart avahi-daemon'
+  # Activate WiFi interface
+  - 'ifup wlan0'
+  - curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  - apt-get update
+  - apt-get install -y kubelet kubeadm kubectl
