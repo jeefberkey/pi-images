@@ -1,0 +1,3 @@
+Gemfile.lock
+.vagrant/
+provisioning/cloud-init/*.yaml

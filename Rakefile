@@ -1,5 +1,6 @@
 require 'erb'
 require 'pry'
+require 'yaml'
 
 # inits = Rake::FileList['cloud-init/*.yaml']
 #
@@ -19,68 +20,57 @@ require 'pry'
 # normal_pis = Rake::FileList['cloud-init/raspi*.yaml']
 # pi_zeros = Rake::FileList['cloud-init/zero*.yaml']
 
-PIS = [
-  'raspi1',
-  'raspi2',
-  'raspi3',
-]
-ZEROS = {
-  zero1: [ 'b8:27:eb:35:fb:a1','192.168.2.70' ],
-  zero2: [ 'b8:27:eb:35:fb:a2','192.168.2.71' ],
-  zero3: [ 'b8:27:eb:35:fb:a3','192.168.2.72' ],
-  zero4: [ 'b8:27:eb:35:fb:a4','192.168.2.73' ],
-  zero5: [ 'b8:27:eb:35:fb:a5','192.168.2.74' ],
-}
-DOMAIN = 'pi.jeef.me'
+hosts = YAML.load_file('hosts.yaml')['all']['children']
+PIS   = hosts['pis']['hosts']
+ZEROS = hosts['zeros']['hosts']
+
+task :ansible_ping_pis do
+  sh 'ansible -i hosts.yaml pis -m ping'
+end
 
 task :gen_cloud_init, [:hostname] do |t,args|
-  PIS.each do |host|
-    template = 'cloud-init-pi.yaml.erb'
-    fqdn     = "#{host}.#{DOMAIN}"
-    wifi     = true
+  PIS.each do |host, data|
+    wifi = false
 
-    f = File.open("cloud-init/#{fqdn}.yaml", 'w')
-    f << ERB.new(File.read(template), nil, '-').result(binding)
+    f = File.open("provisioning/cloud-init/#{host}.yaml", 'w')
+    f << ERB.new(File.read('provisioning/templates/cloud-init-pi.yaml.erb'), nil, '-').result(binding)
     f.close
   end
   ZEROS.each do |host, data|
-    template = 'cloud-init-zero.yaml.erb'
-    fqdn     = "#{host}.#{DOMAIN}"
-    wifi     = false
+    mac = data['mac']
 
-    f = File.open("cloud-init/#{fqdn}.yaml", 'w')
-    f << ERB.new(File.read(template), nil, '-').result(binding)
+    f = File.open("provisioning/cloud-init/#{host}.yaml", 'w')
+    f << ERB.new(File.read('provisioning/templates/cloud-init-zero.yaml.erb'), nil, '-').result(binding)
     f.close
-  end
 
+    c = File.open("provisioning/bootconf/#{host}.txt", 'w')
+    c << ERB.new(File.read('provisioning/templates/cmdline.txt.erb'), nil, '-').result(binding)
+    c.close
+  end
 end
 
 task :flash_pi, [:dev, :hostname] do |t,args|
-  # flash --userdata sample/wlan-user-data.yaml
-  #   --bootconf sample/no-uart-config.txt hypriotos-rpi-v1.7.1.img
-  image = Dir.glob('images/*.{img,zip}').sort.first
-  cmd  = './flash'
+  image = Dir.glob('images/hypriot*.{img,zip}').sort.first
+  cmd  = './provisioning/flash'
   cmd += " --device #{args[:dev]}"
   cmd += " --hostname #{args[:hostname]}.pi.jeef.me"
-  cmd += " --ssid pi-net"
-  cmd += " --password somethingeasy"
-  cmd += " --bootconf bootconf/pi-config.txt"
-  cmd += " --userdata cloud-init/#{args[:hostname]}.pi.jeef.me.yaml"
+  # cmd += " --ssid pi-net"
+  # cmd += " --password somethingeasy"
+  cmd += " --bootconf provisioning/bootconf/pi-config.txt"
+  cmd += " --userdata provisioning/cloud-init/#{args[:hostname]}.pi.jeef.me.yaml"
   cmd += " " + image
 
   sh cmd
 end
-
 task :flash_zero, [:dev, :hostname] do |t,args|
-  # flash --userdata sample/wlan-user-data.yaml
-  #   --bootconf sample/no-uart-config.txt hypriotos-rpi-v1.7.1.img
-  image = Dir.glob('images/*.{img,zip}').sort.first
-  cmd  = './flash'
+  # https://gist.github.com/gbaman/975e2db164b3ca2b51ae11e45e8fd40a
+  image = Dir.glob('images/hypriot*.{img,zip}').sort.first
+  cmd  = './provisioning/flash'
   cmd += " --device #{args[:dev]}"
   cmd += " --hostname #{args[:hostname]}.pi.jeef.me"
-  cmd += " --bootconf bootconf/zero-config.txt"
-  cmd += " --cmdline bootconf/zero-cmdline.txt"
-  cmd += " --userdata cloud-init/#{args[:hostname]}.pi.jeef.me.yaml"
+  cmd += " --bootconf provisioning/bootconf/zero-config.txt"
+  cmd += " --cmdline provisioning/bootconf/#{args[:hostname]}.pi.jeef.me.txt"
+  cmd += " --userdata provisioning/cloud-init/#{args[:hostname]}.pi.jeef.me.yaml"
   cmd += " " + image
 
   sh cmd

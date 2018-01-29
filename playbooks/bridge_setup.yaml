@@ -1,0 +1,32 @@
+# https://manpages.debian.org/stretch/bridge-utils/bridge-utils-interfaces.5.en.html
+# https://wiki.debian.org/BridgeNetworkConnections
+---
+- hosts: all
+  remote_user: nick
+  become: true
+
+  tasks:
+
+  - name: install bridge-utils
+    apt: name=bridge-utils state=present
+
+  - name: set eth interfaces to static
+    template:
+      dest: /etc/network/interfaces.d/{{ item }}
+      src: playbooks/interfaces.j2
+    with_items: "{{ ansible_interfaces | map('regex_search','eth') }}"
+
+  - name: add the bridge device
+    copy:
+      dest: /etc/network/interfaces.d/br0
+      content: |
+        iface br0 inet dhcp
+          bridge_ports regex eth*
+          bridge_maxwait 600
+          bridge_waitport 600
+    notify:
+    - restart networking
+
+  handlers:
+  - name: restart networking
+    service: name=networking state=restarted
