@@ -7,14 +7,33 @@
 
   tasks:
 
-  - name: install bridge-utils
-    apt: name=bridge-utils state=present
+  - apt:
+      name: bridge-utils
+      state: present
 
-  - name: set eth interfaces to static
-    template:
-      dest: /etc/network/interfaces.d/{{ item }}
-      src: playbooks/interfaces.j2
-    with_items: "{{ ansible_interfaces | map('regex_search','eth') }}"
+  - name: set eth0 to manual
+    copy:
+      dest: /etc/network/interfaces.d/eth0
+      content: |
+        allow-hotplug eth0
+        iface eth0 inet manual
+    when: eth1 in ansible_interfaces
+
+  - name: set eth1 to manual
+    copy:
+      dest: /etc/network/interfaces.d/eth1
+      content: |
+        allow-hotplug eth1
+        iface eth1 inet manual
+    when: eth1 in ansible_interfaces
+
+  - name: set eth2 to manual
+    copy:
+      dest: /etc/network/interfaces.d/eth2
+      content: |
+        allow-hotplug eth2
+        iface eth2 inet manual
+    when: eth2 in ansible_interfaces
 
   - name: add the bridge device
     copy:
@@ -22,11 +41,9 @@
       content: |
         iface br0 inet dhcp
           bridge_ports regex eth*
-          bridge_maxwait 600
-          bridge_waitport 600
-    notify:
-    - restart networking
+          bridge_stp off
+          bridge_waitport 90
+          bridge_fd 0
+    when: eth1 in ansible_interfaces
 
-  handlers:
-  - name: restart networking
-    service: name=networking state=restarted
+  - shell: ifup br0

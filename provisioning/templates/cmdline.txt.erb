@@ -1,1 +1,21 @@
-dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 cgroup_enable=cpuset cgroup_enable=memory swapaccount=1 elevator=deadline fsck.repair=yes rootwait <% if mac -%>modules-load=dwc2,g_ether g_ether.dev_addr=<%= mac %> g_ether.host_addr=<%= mac %><% end -%> console=serial0,115200 kgdboc=ttyAMA0,115200
+<%
+  cmdline = []
+  cmdline << 'dwc_otg.lpm_enable=0'
+  cmdline << 'console=tty1'
+  cmdline << 'root=/dev/mmcblk0p2'
+  cmdline << 'rootfstype=ext4'
+  cmdline << 'cgroup_enable=cpuset'
+  cmdline << 'cgroup_enable=memory'
+  cmdline << 'swapaccount=1'
+  cmdline << 'elevator=deadline'
+  cmdline << 'fsck.repair=yes'
+  cmdline << 'rootwait'
+  if dev_mac or host_mac
+    cmdline << 'modules-load=dwc2,g_ether'
+    cmdline << "g_ether.dev_addr=#{dev_mac}" if dev_mac
+    cmdline << "g_ether.host_addr=#{host_mac}" if host_mac
+  end
+  cmdline << 'console=serial0,115200'
+  cmdline << 'kgdboc=ttyAMA0,115200'
+-%>
+<%= cmdline.join(' ') %>

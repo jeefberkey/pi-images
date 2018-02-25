@@ -3,7 +3,13 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "debian/jessie64"
+  config.vm.define "host" do |host|
+    config.vm.box = "debian/stretch64"
+  end
+  config.vm.define "guest" do |guest|
+    config.vm.box = "debian/stretch64"
+  end
+
 
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
@@ -16,9 +22,9 @@ Vagrant.configure("2") do |config|
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
   # end
-  config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y cloud-init
-  SHELL
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get upgrade -y
+  #   apt-get install -y cloud-init
+  # SHELL
 end
