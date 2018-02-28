@@ -1,7 +1,5 @@
 ---
 - hosts: all
-  remote_user: nick
-  become: true
 
   tasks:
 
@@ -14,6 +12,10 @@
       repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
       state: present
 
+  - name: update apt cache because you have to do this on debian
+    apt:
+      update_cache: yes
+
   - name: install the dang packages
     apt: name={{item}} state=installed
     with_items:
@@ -21,8 +23,40 @@
       - kubeadm
       - kubectl
 
-  - name: enable the service
-    service:
-      name: kubelet
-      state: started
-      enabled: true
+  - name: no more swap
+    command: swapoff -a
+
+  - name: sysctl stuff
+    sysctl:
+      name: net.bridge.bridge-nf-call-iptables
+      value: 1
+      state: present
+
+  - name: more sysctl stuff
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      state: present
+
+  # - name: create cni dir
+  #   file:
+  #     path: "{{ item }}"
+  #     state: directory
+  #   with_items:
+  #     - /etc/cni
+  #     - /etc/cni/net.d
+
+  # - name: flannel config
+  #   copy:
+  #     content: |
+  #       {
+  #         "name": "kube-flannel",
+  #         "type": "flannel"
+  #       }
+  #     dest: /etc/cni/net.d/10-flannel.conf
+
+  # - name: enable the service
+  #   service:
+  #     name: kubelet
+  #     state: started
+  #     enabled: true

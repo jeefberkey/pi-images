@@ -1,5 +1,9 @@
 Gemfile.lock
 .vagrant/
+.cache/
+.log/
+.cp/
+
 images/*.zip
 **/*.retry
 provisioning/cloud-init/*.yaml

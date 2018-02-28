@@ -1,0 +1,13 @@
+---
+- hosts: all
+
+  tasks:
+  - apt:
+      update_cache: yes
+      upgrade: yes
+
+  - apt: name={{item}} state=installed
+    with_items:
+      - vim
+      - git
+      - htop

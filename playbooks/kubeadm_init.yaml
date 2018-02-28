@@ -1,0 +1,15 @@
+---
+- hosts: all
+
+  vars:
+    token: 98a524.60030abac959b0ff
+
+  tasks:
+
+  - name: copy in the kubeadm config
+    template:
+      src: templates/kubeadm.yaml.j2
+      dest: /etc/kubeadm.config.yaml
+
+  # - name: run kubeadm
+  #   shell: kubeadm init --config /etc/kubeadm.config.yaml

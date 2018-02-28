@@ -1,0 +1,7 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: run kubeadm
+    shell: kubeadm join --token 7b2d78.89965ac0dbfe6a28 192.168.2.40:443 --discovery-token-ca-cert-hash sha256:64d5995b24e39fc6f09fbc23e316511bdaa550e236565155d30595e0ab6358a7
