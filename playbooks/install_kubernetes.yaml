@@ -38,6 +38,13 @@
       value: 1
       state: present
 
+  - name: setup flex volumes ? for rook
+    copy:
+      content: |
+        [Service]
+        Environment="KUBELET_EXTRA_ARGS=--volume-plugin-dir=/var/lib/kubelet/volumeplugins"
+      dest: /etc/systemd/system/kubelet.service.d/09-flexvolume.conf
+
   # - name: create cni dir
   #   file:
   #     path: "{{ item }}"
