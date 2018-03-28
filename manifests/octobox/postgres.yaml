@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: octobox-postgresql
+  namespace: octobox
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: octobox
+        k8s-app: postgresql
+    spec:
+      containers:
+      # https://hub.docker.com/_/postgres/
+      - name: postgres
+        image: postgres
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgresql-storage
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "somethingeasy"
+      volumes:
+      - name: postgresql-storage
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: octobox
+    kubernetes.io/name: octobox-postgresql
+  name: octobox-postgresql
+  namespace: octobox
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    k8s-app: postgresql
+    tier: backend
+  # type: LoadBalancer

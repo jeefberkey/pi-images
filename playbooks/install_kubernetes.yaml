@@ -38,12 +38,13 @@
       value: 1
       state: present
 
-  - name: setup flex volumes ? for rook
-    copy:
-      content: |
-        [Service]
-        Environment="KUBELET_EXTRA_ARGS=--volume-plugin-dir=/var/lib/kubelet/volumeplugins"
-      dest: /etc/systemd/system/kubelet.service.d/09-flexvolume.conf
+  # - name: setup flex volumes ? for rook
+  #   copy:
+  #     content: |
+  #       [Service]
+  #       # Environment="KUBELET_EXTRA_ARGS=--volume-plugin-dir=/var/lib/kubelet/volumeplugins"
+  #       Environment="KUBE_FEATURE_GATES=PersistentLocalVolumes=true,VolumeScheduling=true,MountPropagation=true"
+  #     dest: /etc/systemd/system/kubelet.service.d/09-overrides.conf
 
   # - name: create cni dir
   #   file:
@@ -57,7 +58,7 @@
   #   copy:
   #     content: |
   #       {
-  #         "name": "kube-flannel",
+  #         "name": "kube-pi-net",
   #         "type": "flannel"
   #       }
   #     dest: /etc/cni/net.d/10-flannel.conf

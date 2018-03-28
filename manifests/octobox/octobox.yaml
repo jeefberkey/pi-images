@@ -1,2 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: octobox-octobox
+  namespace: octobox
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: octobox
+        k8s-app: octobox
+    spec:
+      containers:
+      # https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml
+      # you have to rebuild the container, because arm
+      - name: octobox
+        image: octobox-pi
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: RAILS_ENV
+          value: development
+        - name: OCTOBOX_DATABASE_NAME
+          value: postgres
+        - name: OCTOBOX_DATABASE_USERNAME
+          value: postgres
+        - name: OCTOBOX_DATABASE_PASSWORD
+          value: somethingeasy
+        - name: OCTOBOX_DATABASE_HOST
+          value: octobox-postgresql.octobox.svc.cluster.local
+        - name: REDIS_URL
+          value: octobox-redis.octobox.svc.cluster.local
+        - name: MINIMUM_REFRESH_INTERVAL
+          value: "5"
+        - name: PERSONAL_ACCESS_TOKENS_ENABLED
+          value: "1"
+        # - name: GITHUB_CLIENT_ID
+        #   value: ${GITHUB_CLIENT_ID}
+        # - name: GITHUB_CLIENT_SECRET
+        #   value: ${GITHUB_CLIENT_SECRET}
+
 ---
-  
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    task: octobox
+    kubernetes.io/name: octobox
+  name: octobox
+  namespace: octobox
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    k8s-app: octobox
+  type: LoadBalancer

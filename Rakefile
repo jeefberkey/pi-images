@@ -36,7 +36,7 @@ task :gen_cloud_init, [:hostname] do |t,args|
 end
 
 task :flash_pi, [:dev, :hostname] do |t,args|
-  image = Dir.glob('images/hypriot*.{img,zip}').sort.first
+  image = Dir.glob('images/hypriot*.{img,zip}').sort[1]
 
   cmd  = './provisioning/flash'
   cmd += " --device #{args[:dev]}"

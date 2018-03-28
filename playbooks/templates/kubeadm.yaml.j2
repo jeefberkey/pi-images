@@ -4,60 +4,9 @@ kind: MasterConfiguration
 api:
   advertiseAddress: {{ ansible_eth0.ipv4.address }}
   bindPort: 443
-{#etcd:#}
-{#  endpoints:#}
-{#  - {{ ansible_eth0.ipv4.address }}#}
-{#   caFile: <path|string>#}
-{#   certFile: <path|string>#}
-{#   keyFile: <path|string>#}
-{#   dataDir: <path|string>#}
-{#   extraArgs:#}
-{#     <argument>: <value|string>#}
-{#     <argument>: <value|string>#}
-{#   image: <string>#}
-{# kubeProxy:#}
-{#   config:#}
-{#     mode: <value|string>#}
 networking:
   podSubnet: 10.96.0.0/12
-{#   dnsDomain: k.pi.jeef.me#}
-{#   serviceSubnet: <cidr>#}
-{# kubernetesVersion: <string>#}
-{# cloudProvider: <string>#}
-{# nodeName: <string>#}
-{# authorizationModes:#}
-{# - <authorizationMode1|string>#}
-{# - <authorizationMode2|string>#}
-{# token: {{ token }}#}
-{# tokenTTL: <time duration>#}
-{# selfHosted: <bool>#}
-{# apiServerExtraArgs:#}
-{#   <argument>: <value|string>#}
-{#   <argument>: <value|string>#}
-{# controllerManagerExtraArgs:#}
-{#   <argument>: <value|string>#}
-{#   <argument>: <value|string>#}
-{# schedulerExtraArgs:#}
-{#   <argument>: <value|string>#}
-{#   <argument>: <value|string>#}
-{# apiServerExtraVolumes:#}
-{# - name: <value|string>#}
-{#   hostPath: <value|string>#}
-{#   mountPath: <value|string>#}
-{# controllerManagerExtraVolumes:#}
-{# - name: <value|string>#}
-{#   hostPath: <value|string>#}
-{#   mountPath: <value|string>#}
-{# schedulerExtraVolumes:#}
-{# - name: <value|string>#}
-{#   hostPath: <value|string>#}
-{#   mountPath: <value|string>#}
-{# apiServerCertSANs:#}
-{# - <name1|string>#}
-{# - <name2|string>#}
-{# certificatesDir: <string>#}
-{# imageRepository: <string>#}
-{# unifiedControlPlaneImage: <string>#}
-{# featureGates:#}
-{#   <feature>: <bool>#}
-{#   <feature>: <bool>#}
+# featureGates:
+#   PersistentLocalVolumes: true
+#   VolumeScheduling: true
+#   MountPropagation: true
