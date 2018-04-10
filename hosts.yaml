@@ -4,10 +4,14 @@ all:
     pis:
       hosts:
         raspi1.pi.jeef.me:
-          mac: b8:27:eb:db:7f:5b
+          mac: b8:27:eb:2c:7f:63
         raspi2.pi.jeef.me:
-          mac: b8:27:eb:fe:1a:be
+          mac: b8:27:eb:cc:31:84
         raspi3.pi.jeef.me:
+          mac: b8:27:eb:db:7f:5b
+        raspi4.pi.jeef.me:
+          mac: b8:27:eb:fe:1a:be
+        raspi5.pi.jeef.me:
           mac: b8:27:eb:60:ae:e4
     zeros:
       hosts:

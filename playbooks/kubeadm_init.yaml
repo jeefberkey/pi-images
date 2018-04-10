@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: raspi1
 
   vars:
     token: 98a524.60030abac959b0ff

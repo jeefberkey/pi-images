@@ -1,0 +1,25 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: create override dir
+    file:
+      path: /etc/systemd/system/docker.service.d/
+      state: directory
+
+  # after a reboot the docker daemon can't restart because the params are empty
+  # because the environment file doesn't exist
+  - name: tell docker to use flannel network config
+    copy:
+      content: |
+        [Service]
+        EnvironmentFile=-/run/flannel/subnet.env
+        ExecStart=
+        ExecStart=/usr/bin/dockerd --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} -H fd://
+      dest: /etc/systemd/system/docker.service.d/override.conf
+
+  - systemd:
+      daemon_reload: yes
+      name: docker
+      state: restarted

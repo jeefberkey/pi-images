@@ -17,11 +17,13 @@
       update_cache: yes
 
   - name: install the dang packages
-    apt: name={{item}} state=installed
+    apt: name={{item}} state=present
     with_items:
       - kubelet
       - kubeadm
       - kubectl
+      - open-iscsi # for longhorn
+      - jq # for longhorn
 
   - name: no more swap
     command: swapoff -a
@@ -37,6 +39,9 @@
       name: net.ipv4.ip_forward
       value: 1
       state: present
+
+  - name: disable docker0
+    shell: ip link set docker0 down
 
   # - name: setup flex volumes ? for rook
   #   copy:

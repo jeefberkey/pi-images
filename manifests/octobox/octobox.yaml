@@ -22,7 +22,7 @@ spec:
           protocol: TCP
         env:
         - name: RAILS_ENV
-          value: development
+          value: production
         - name: OCTOBOX_DATABASE_NAME
           value: postgres
         - name: OCTOBOX_DATABASE_USERNAME
@@ -48,7 +48,6 @@ kind: Service
 metadata:
   labels:
     task: octobox
-    kubernetes.io/name: octobox
   name: octobox
   namespace: octobox
 spec:

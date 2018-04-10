@@ -1,0 +1,34 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: add temp monitoring script
+    copy:
+      src: files/read_temp.sh
+      dest: /usr/local/sbin/read_temp.sh
+      mode: +x
+
+  - name: log temperature to syslog
+    cron:
+      name: temp
+      minute: '*/5'
+      job: '/usr/local/sbin/read_temp.sh'
+
+  - name: set journal to persistent
+    ini_file:
+      path: /etc/systemd/journald.conf
+      section: Journal
+      option: Storage
+      value: persistent
+
+  - name: set journal to only use 150mb at most
+    ini_file:
+      path: /etc/systemd/journald.conf
+      section: Journal
+      option: SystemMaxUse
+      value: 150M
+
+  - systemd:
+      name: systemd-journald.service
+      state: restarted

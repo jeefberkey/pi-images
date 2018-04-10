@@ -14,16 +14,52 @@ spec:
       containers:
       # https://hub.docker.com/_/postgres/
       - name: postgres
-        image: postgres
+        image: postgres:alpine
+        args:
+        # - -c
+        # - ssl=off
+        # - -c
+        # - listen_addresses='*'
+        # - -c
+        # - port=5432
+        - -c
+        - authentication_timeout=15s
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgresql-storage
         ports:
-        - containerPort: 5432
+        - name: metrics
+          containerPort: 9187
+        - name: postgres
+          containerPort: 5432
           protocol: TCP
         env:
+        - name: POSTGRES_USER
+          value: postgres
+        # - name: PG_USER
+        #   value: postgres
         - name: POSTGRES_PASSWORD
           value: "somethingeasy"
+        # - name: POD_IP
+        #   valueFrom: { fieldRef: { fieldPath: status.podIP } }
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #     - sh
+        #     - -c
+        #     - exec pg_isready --host $POD_IP
+        #   initialDelaySeconds: 120
+        #   timeoutSeconds: 5
+        #   failureThreshold: 6
+        # readinessProbe:
+        #   exec:
+        #     command:
+        #     - sh
+        #     - -c
+        #     - exec pg_isready --host $POD_IP
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 3
+        #   periodSeconds: 5
       volumes:
       - name: postgresql-storage
         emptyDir: {}
@@ -33,7 +69,6 @@ kind: Service
 metadata:
   labels:
     task: octobox
-    kubernetes.io/name: octobox-postgresql
   name: octobox-postgresql
   namespace: octobox
 spec:

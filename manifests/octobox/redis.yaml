@@ -24,7 +24,6 @@ kind: Service
 metadata:
   labels:
     task: octobox
-    kubernetes.io/name: octobox-redis
   name: octobox-redis
   namespace: octobox
 spec:

@@ -8,7 +8,8 @@ metadata:
 data:
   config: |
     address-pools:
-    - name: my-ip-space
-      protocol: arp
-      cidr:
+    - name: pi-jeef-me
+      protocol: layer2
+      addresses:
+      # 14 available addresses
       - 192.168.2.240/28
