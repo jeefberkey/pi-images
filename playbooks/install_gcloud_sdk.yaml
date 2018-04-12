@@ -1,0 +1,19 @@
+---
+- hosts: raspi2.pi.jeef.me
+
+  tasks:
+
+  - name: install key for the goog repo
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+  - name: install repo from the goog
+    apt_repository:
+      repo: deb http://packages.cloud.google.com/apt cloud-sdk-xenial main
+      state: present
+
+  - name: install the package
+    apt:
+      name: google-cloud-sdk
+      update_cache: yes
+      state: present

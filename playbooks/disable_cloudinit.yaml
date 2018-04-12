@@ -1,0 +1,14 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: disable cloudinit
+    systemd:
+      name: "{{ item }}"
+      enabled: no
+      state: stopped
+    with_items:
+      - cloud-config
+      - cloud-final
+      - cloud-init
