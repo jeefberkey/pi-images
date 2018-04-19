@@ -32,3 +32,15 @@
   - systemd:
       name: systemd-journald.service
       state: restarted
+
+  - name: install systemd-coredump
+    apt:
+      name: systemd-coredump
+      state: present
+
+  - name: enable saving of coredumps
+    ini_file:
+      path: /etc/systemd/coredump.conf
+      section: Coredump
+      option: Storage
+      value: journal

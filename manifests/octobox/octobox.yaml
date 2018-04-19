@@ -15,14 +15,14 @@ spec:
       # https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml
       # you have to rebuild the container, because arm
       - name: octobox
-        image: octobox-pi
-        imagePullPolicy: Never
+        image: us.gcr.io/jeefme-185614/octobox:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
           protocol: TCP
         env:
         - name: RAILS_ENV
-          value: production
+          value: development
         - name: OCTOBOX_DATABASE_NAME
           value: postgres
         - name: OCTOBOX_DATABASE_USERNAME
@@ -37,6 +37,13 @@ spec:
           value: "5"
         - name: PERSONAL_ACCESS_TOKENS_ENABLED
           value: "1"
+        - name: RAILS_LOG_TO_STDOUT
+          value: "yes"
+        # ocotobox issues with arm
+        # bootsnap issue https://github.com/Shopify/bootsnap/issues/67
+        # ruby issue https://bugs.ruby-lang.org/issues/13670
+        - name: DISABLE_SPRING
+          value: "true"
         # - name: GITHUB_CLIENT_ID
         #   value: ${GITHUB_CLIENT_ID}
         # - name: GITHUB_CLIENT_SECRET
@@ -52,8 +59,8 @@ metadata:
   namespace: octobox
 spec:
   ports:
-  - port: 3000
-    targetPort: 3000
+  - port: 80
+    # targetPort: 3000
   selector:
     k8s-app: octobox
   type: LoadBalancer
