@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: octobox-octobox
+  name: octobox
   namespace: octobox
 spec:
   replicas: 1
@@ -30,9 +30,9 @@ spec:
         - name: OCTOBOX_DATABASE_PASSWORD
           value: somethingeasy
         - name: OCTOBOX_DATABASE_HOST
-          value: octobox-postgresql.octobox.svc.cluster.local
+          value: postgresql.octobox
         - name: REDIS_URL
-          value: octobox-redis.octobox.svc.cluster.local
+          value: redis.octobox
         - name: MINIMUM_REFRESH_INTERVAL
           value: "5"
         - name: PERSONAL_ACCESS_TOKENS_ENABLED
@@ -59,8 +59,9 @@ metadata:
   namespace: octobox
 spec:
   ports:
-  - port: 80
-    # targetPort: 3000
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
   selector:
     k8s-app: octobox
   type: LoadBalancer

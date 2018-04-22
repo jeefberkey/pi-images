@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: octobox-redis
+  name: redis
   namespace: octobox
 spec:
   replicas: 1
@@ -24,12 +24,13 @@ kind: Service
 metadata:
   labels:
     task: octobox
-  name: octobox-redis
+  name: redis
   namespace: octobox
 spec:
   ports:
   - port: 6379
-    # targetPort: 6379
+    targetPort: 6379
+    protocol: TCP
   selector:
     k8s-app: redis
     tier: backend
