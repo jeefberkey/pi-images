@@ -28,7 +28,7 @@ spec:
         - name: OCTOBOX_DATABASE_USERNAME
           value: postgres
         - name: OCTOBOX_DATABASE_PASSWORD
-          value: somethingeasy
+          value: "somethingeasy"
         - name: OCTOBOX_DATABASE_HOST
           value: postgresql.octobox
         - name: REDIS_URL

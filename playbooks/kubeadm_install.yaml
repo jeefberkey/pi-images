@@ -25,23 +25,37 @@
       - open-iscsi # for longhorn
       - jq # for longhorn
 
+  - name: the kernel module is required
+    modprobe:
+      name: br_netfilter
+      state: present
+
   - name: no more swap
     command: swapoff -a
 
   - name: sysctl stuff
     sysctl:
+      name: vm.swappiness
+      value: 0
+      state: present
+      sysctl_set: yes
+
+  - name: more sysctl stuff
+    sysctl:
       name: net.bridge.bridge-nf-call-iptables
       value: 1
       state: present
+      sysctl_set: yes
 
-  - name: more sysctl stuff
+  - name: even more sysctl stuff
     sysctl:
       name: net.ipv4.ip_forward
       value: 1
       state: present
+      sysctl_set: yes
 
-  - name: disable docker0
-    shell: ip link set docker0 down
+  # - name: disable docker0
+  #   shell: ip link set docker0 down
 
   # - name: setup flex volumes ? for rook
   #   copy:

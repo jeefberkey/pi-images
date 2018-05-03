@@ -1,0 +1,37 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: install the old docker repo
+    apt_repository:
+      # current is stretch
+      repo: deb [arch=armhf] https://download.docker.com/linux/ubuntu xenial stable
+      state: present
+      filename: docker
+
+  - name: update apt cache because you have to do this on debian
+    apt:
+      update_cache: yes
+
+  - name: remove docker-ce
+    apt:
+      name: docker-ce
+      state: absent
+      force: true
+
+  # https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.9.md#external-dependencies
+  - name: install the last supported version of docker-ce
+    apt:
+      name: docker-ce=17.03.2~ce-0~ubuntu-xenial
+      state: present
+      force: true
+
+  - name: lock the docker-ce package to prevent update
+    shell: apt-mark hold docker-ce
+
+  - systemd:
+      daemon_reload: yes
+      name: docker
+      state: restarted
+

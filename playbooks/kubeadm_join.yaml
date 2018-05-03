@@ -1,7 +1,7 @@
 ---
-- hosts: raspi[1345].pi.jeef.me
+- hosts: raspi[2345].pi.jeef.me
 
   tasks:
 
   - name: run kubeadm
-    shell: kubeadm join 192.168.2.41:443 --token q2pkdt.syh5t5ithxe19nl7 --discovery-token-ca-cert-hash sha256:145bf703050407e4a34e0e794cec8efb27e086f326c2773e23cda3b34e6fcf78
+    shell: kubeadm join 192.168.2.40:443 --token jjtpse.t76kdob67i95e2y7 --discovery-token-ca-cert-hash sha256:532b3a9b819fa91a1122bbbaf10153fbce579258ea621474f2769f3fa50d48e5

@@ -5,7 +5,7 @@ api:
   advertiseAddress: {{ ansible_eth0.ipv4.address }}
   bindPort: 443
 networking:
-  podSubnet: 10.96.0.0/12
+  podSubnet: 10.244.0.0/16
 # featureGates:
 #   PersistentLocalVolumes: true
 #   VolumeScheduling: true

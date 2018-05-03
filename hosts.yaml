@@ -11,8 +11,8 @@ all:
           mac: b8:27:eb:db:7f:5b
         raspi4.pi.jeef.me:
           mac: b8:27:eb:fe:1a:be
-        raspi5.pi.jeef.me:
-          mac: b8:27:eb:60:ae:e4
+        # raspi5.pi.jeef.me:
+        #   mac: b8:27:eb:60:ae:e4
     # zeros:
     #   hosts:
     #     zero1.pi.jeef.me:
