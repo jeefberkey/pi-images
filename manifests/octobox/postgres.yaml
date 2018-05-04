@@ -1,19 +1,22 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresql
   namespace: octobox
+  name: postgresql
+  labels:
+    app: postgresql
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
   template:
     metadata:
       labels:
-        task: octobox
-        k8s-app: postgresql
+        app: postgresql
     spec:
       containers:
       # https://hub.docker.com/_/postgres/
-      - name: postgres
+      - name: postgresql
         image: postgres:alpine
         args:
         - -c
@@ -61,16 +64,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    task: octobox
-  name: postgresql
   namespace: octobox
+  name: postgresql
+  labels:
+    app: postgresql
 spec:
+  type: ClusterIP
   ports:
   - port: 5432
     targetPort: 5432
     protocol: TCP
   selector:
-    k8s-app: postgresql
-    tier: backend
+    app: postgresql
   # type: LoadBalancer
