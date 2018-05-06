@@ -3,6 +3,7 @@ Gemfile.lock
 .cache/
 .log/
 .cp/
+src/
 
 images/*.zip
 **/*.retry
@@ -10,3 +11,5 @@ provisioning/cloud-init/*.yaml
 provisioning/bootconf/*
 !provisioning/bootconf/pi-config.txt
 !provisioning/bootconf/zero-config.txt
+
+manifests/octobox/secrets.yaml
