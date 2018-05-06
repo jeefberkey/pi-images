@@ -15,7 +15,7 @@ spec:
         app: octobox
     spec:
       containers:
-      # https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml
+      # https://github.com/jeefberkey/octobox/blob/docker-arm/docker_build.sh
       # you have to rebuild the container, because arm
       - name: octobox
         image: us.gcr.io/jeefme-185614/octobox:latest
@@ -31,7 +31,10 @@ spec:
         - name: OCTOBOX_DATABASE_USERNAME
           value: postgres
         - name: OCTOBOX_DATABASE_PASSWORD
-          value: "somethingeasy"
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: password
         - name: OCTOBOX_DATABASE_HOST
           value: postgresql
         - name: REDIS_URL
@@ -43,16 +46,22 @@ spec:
         - name: RAILS_LOG_TO_STDOUT
           value: "yes"
         - name: FETCH_SUBJECT
-          value: true
+          value: "true"
         # ocotobox issues with arm
         # bootsnap issue https://github.com/Shopify/bootsnap/issues/67
         # ruby issue https://bugs.ruby-lang.org/issues/13670
         - name: DISABLE_SPRING
           value: "true"
-        # - name: GITHUB_CLIENT_ID
-        #   value: ${GITHUB_CLIENT_ID}
-        # - name: GITHUB_CLIENT_SECRET
-        #   value: ${GITHUB_CLIENT_SECRET}
+        - name: GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: client_id
+        - name: GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: client_secret
 
 ---
 apiVersion: v1

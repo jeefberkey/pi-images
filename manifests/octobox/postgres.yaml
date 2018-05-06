@@ -36,7 +36,10 @@ spec:
         - name: PG_USER
           value: postgres
         - name: POSTGRES_PASSWORD
-          value: "somethingeasy"
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: password
         - name: POD_IP
           valueFrom: { fieldRef: { fieldPath: status.podIP } }
         livenessProbe:

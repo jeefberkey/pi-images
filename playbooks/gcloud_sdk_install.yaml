@@ -1,5 +1,5 @@
 ---
-- hosts: raspi4.pi.jeef.me
+- hosts: raspi2.pi.jeef.me
 
   tasks:
 
