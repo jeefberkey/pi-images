@@ -25,7 +25,7 @@
       - open-iscsi # for longhorn
       - jq # for longhorn
 
-  - name: the kernel module is required
+  - name: this kernel module is required
     modprobe:
       name: br_netfilter
       state: present

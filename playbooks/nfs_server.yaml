@@ -1,0 +1,27 @@
+---
+- hosts: raspi2.pi.jeef.me
+
+  tasks:
+
+  - name: install deps
+    apt: name={{item}} state=present
+    with_items:
+    - nfs-kernel-server
+    - nfs-common
+
+  # mount flash drive as /data
+
+  - name: make sure exports dir is created
+    file:
+      path: /data/exports
+      state: directory
+
+  - name: copy /etc/exports
+    template:
+      src: exports.j2
+      dest: /etc/exports
+
+  - name: restart nfs server
+    service:
+      name: nfs-kernel-server
+      state: restarted
