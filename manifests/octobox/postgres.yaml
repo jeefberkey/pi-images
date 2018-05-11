@@ -62,7 +62,9 @@ spec:
           periodSeconds: 5
       volumes:
       - name: postgresql-storage
-        emptyDir: {}
+        nfs:
+          server: 192.168.2.41
+          path: /data/postgres
 ---
 apiVersion: v1
 kind: Service

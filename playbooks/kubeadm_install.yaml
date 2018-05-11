@@ -22,8 +22,9 @@
       - kubelet
       - kubeadm
       - kubectl
-      - open-iscsi # for longhorn
-      - jq # for longhorn
+      - nfs-common
+      # - open-iscsi # for longhorn
+      # - jq # for longhorn
 
   - name: this kernel module is required
     modprobe:

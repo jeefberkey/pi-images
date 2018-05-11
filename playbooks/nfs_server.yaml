@@ -8,20 +8,44 @@
     with_items:
     - nfs-kernel-server
     - nfs-common
+    - portmap
 
-  # mount flash drive as /data
+  - name: mount flash drive as /data
+    mount:
+      state: mounted
+      path: /data
+      src: /dev/sda
+      fstype: f2fs
 
   - name: make sure exports dir is created
     file:
-      path: /data/exports
+      path: /data/postgres
       state: directory
+      # owner: nobody
+      # group: nogroup
+      # mode: 755
 
-  - name: copy /etc/exports
-    template:
-      src: exports.j2
-      dest: /etc/exports
+  - name: export /data/postgres
+    lineinfile:
+      path: /etc/exports
+      regexp: /data/postgres
+      line: /data/postgres      *(rw,sync,no_subtree_check,no_root_squash)
 
+  - name: prevent access to nfs local services
+    lineinfile:
+      path: /etc/hosts.deny
+      regexp: "rpcbind mountd nfsd statd lockd rquotad"
+      line: "rpcbind mountd nfsd statd lockd rquotad : ALL"
+
+  - name: allow the rest
+    lineinfile:
+      path: /etc/hosts.allow
+      regexp: "rpcbind mountd nfsd statd lockd rquotad"
+      line: "rpcbind mountd nfsd statd lockd rquotad : ALL : allow"
+
+  - shell: exportfs -ra
   - name: restart nfs server
     service:
       name: nfs-kernel-server
+      enabled: yes
       state: restarted
