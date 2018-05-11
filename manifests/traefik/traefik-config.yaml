@@ -1,0 +1,39 @@
+---
+# https://github.com/carlosedp/kubernetes-arm/blob/master/2-Traefik/traefik-internal-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-configmap
+  namespace: kube-system
+data:
+  traefik.toml: |
+    defaultEntryPoints = ["http","https"]
+    debug = false
+    logLevel = "INFO"
+
+    # Do not verify backend certificates (use https backends)
+    # InsecureSkipVerify = true
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+      [entryPoints.https]
+      address = ":443"
+      [entryPoints.https.tls]
+
+    [web]
+      address = ":8080"
+
+    [kubernetes]
+
+    [ping]
+    entryPoint = "http"
+
+    [acme]
+    email = "traefik@jeef.me"
+    storage = "acme.json"
+    entryPoint = "https"
+    onHostRule = true
+    [acme.httpChallenge]
+    entryPoint = "http"
