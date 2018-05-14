@@ -1,0 +1,23 @@
+---
+- tasks:
+
+  - name: stop docker and kubelet
+    systemd:
+      name: {{ item }}
+      state: stopped
+    with_items:
+    - docker
+    - kubelet
+
+  - name: remove docker data dir
+    file:
+      name: /var/lib/docker
+      state: absent
+
+  - name: start docker and kubelet
+    systemd:
+      name: {{ item }}
+      state: started
+    with_items:
+    - docker
+    - kubelet
