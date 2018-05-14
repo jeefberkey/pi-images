@@ -32,6 +32,12 @@ spec:
         - --api
         - --kubernetes
         - --configfile=/config/traefik.toml
+        env:
+        - name: DO_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: digitalocean
+              key: auth_token
         volumeMounts:
           - mountPath: /config
             name: config

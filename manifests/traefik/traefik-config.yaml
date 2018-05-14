@@ -16,11 +16,11 @@ data:
     [entryPoints]
       [entryPoints.http]
       address = ":80"
-        [entryPoints.http.redirect]
-        entryPoint = "https"
+        # [entryPoints.http.redirect]
+        # entryPoint = "https"
       [entryPoints.https]
       address = ":443"
-      [entryPoints.https.tls]
+        [entryPoints.https.tls]
 
     [web]
       address = ":8080"
@@ -30,10 +30,17 @@ data:
     [ping]
     entryPoint = "http"
 
-    [acme]
-    email = "traefik@jeef.me"
-    storage = "acme.json"
-    entryPoint = "https"
-    onHostRule = true
-    [acme.httpChallenge]
-    entryPoint = "http"
+    # [acme]
+    # email = "traefik@jeef.me"
+    # storage = "acme.json"
+    # entryPoint = "https"
+    # onHostRule = true
+    # acmeLogging = true
+    # [[acme.domains]]
+    # main = "jeef.me"
+    # sans = ["octobox.jeef.me"]
+    # # [acme.httpChallenge]
+    # # entryPoint = "http"
+    # [acme.dnsChallenge]
+    # provider = "digitalocean"
+

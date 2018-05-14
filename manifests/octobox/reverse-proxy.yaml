@@ -14,7 +14,12 @@ spec:
   - host: octobox.jeef.me
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: octobox
           servicePort: 3000
+  # - host: insecure.jeef.me
+  #   http:
+  #     paths:
+  #     - backend:
+  #         serviceName: octobox
+  #         servicePort: 3000
