@@ -30,17 +30,17 @@ data:
     [ping]
     entryPoint = "http"
 
-    # [acme]
-    # email = "traefik@jeef.me"
-    # storage = "acme.json"
-    # entryPoint = "https"
-    # onHostRule = true
-    # acmeLogging = true
-    # [[acme.domains]]
-    # main = "jeef.me"
-    # sans = ["octobox.jeef.me"]
-    # # [acme.httpChallenge]
-    # # entryPoint = "http"
-    # [acme.dnsChallenge]
-    # provider = "digitalocean"
+    [acme]
+    email = "traefik@jeef.me"
+    storage = "acme.json"
+    entryPoint = "https"
+    onHostRule = true
+    acmeLogging = true
+    [[acme.domains]]
+    main = "jeef.me"
+    sans = ["*.jeef.me"]
+    # [acme.httpChallenge]
+    # entryPoint = "http"
+    [acme.dnsChallenge]
+    provider = "digitalocean"
 

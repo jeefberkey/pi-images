@@ -6,9 +6,6 @@ metadata:
   namespace: octobox
   annotations:
     kubernetes.io/ingress.class: traefik
-    # traefik.ingress.kubernetes.io/redirect-entry-point: https
-    # traefik.ingress.kubernetes.io/redirect-replacement: https://octobox.jeef.me/$1
-    # traefik.ingress.kubernetes.io/redirect-regex: ^http://octobox.jeef.me/(.*)
 spec:
   rules:
   - host: octobox.jeef.me
@@ -17,9 +14,3 @@ spec:
       - backend:
           serviceName: octobox
           servicePort: 3000
-  # - host: insecure.jeef.me
-  #   http:
-  #     paths:
-  #     - backend:
-  #         serviceName: octobox
-  #         servicePort: 3000

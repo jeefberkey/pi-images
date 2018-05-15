@@ -12,4 +12,4 @@ provisioning/bootconf/*
 !provisioning/bootconf/pi-config.txt
 !provisioning/bootconf/zero-config.txt
 
-manifests/octobox/secrets.yaml
+**/secrets.yaml
