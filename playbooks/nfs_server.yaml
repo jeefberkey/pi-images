@@ -19,17 +19,24 @@
 
   - name: make sure exports dir is created
     file:
-      path: /data/postgres
+      path: /data/{{ item }}
       state: directory
-      # owner: nobody
-      # group: nogroup
-      # mode: 755
+    with_items:
+    - postgres
+    - influxdb
+    - traefik
+    - grafana
 
   - name: export /data/postgres
     lineinfile:
       path: /etc/exports
-      regexp: /data/postgres
-      line: /data/postgres      *(rw,sync,no_subtree_check,no_root_squash)
+      regexp: /data/{{ item }}
+      line: /data/{{ item }}      *(rw,sync,no_subtree_check,no_root_squash)
+    with_items:
+    - postgres
+    - influxdb
+    - traefik
+    - grafana
 
   - name: prevent access to nfs local services
     lineinfile:

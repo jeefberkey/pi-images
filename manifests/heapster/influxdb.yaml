@@ -19,7 +19,10 @@ spec:
           name: influxdb-storage
       volumes:
       - name: influxdb-storage
-        emptyDir: {}
+        nfs:
+          server: 192.168.2.41
+          path: /data/influxdb
+
 ---
 apiVersion: v1
 kind: Service

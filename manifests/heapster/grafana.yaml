@@ -47,7 +47,9 @@ spec:
         hostPath:
           path: /etc/ssl/certs
       - name: grafana-storage
-        emptyDir: {}
+        nfs:
+          server: 192.168.2.41
+          path: /data/grafana
 ---
 apiVersion: v1
 kind: Service
