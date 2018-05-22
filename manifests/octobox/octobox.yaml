@@ -23,6 +23,13 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+        livenessProbe:
+          initialDelaySeconds: 30
+          timeoutSeconds: 8
+          periodSeconds: 300
+          httpGet:
+            path: /
+            port: 3000
         env:
         - name: RAILS_ENV
           value: development
