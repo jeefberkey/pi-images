@@ -19,12 +19,13 @@
   - name: install the dang packages
     apt: name={{item}} state=present
     with_items:
-      - kubelet
+      - kubelet=1.10.2-00 # 1.10.3 has issues on arm
       - kubeadm
       - kubectl
       - nfs-common
-      # - open-iscsi # for longhorn
-      # - jq # for longhorn
+
+  - name: lock the kubelet package to prevent update
+    shell: apt-mark hold kubelet
 
   - name: this kernel module is required
     modprobe:

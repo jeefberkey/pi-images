@@ -41,10 +41,16 @@ spec:
         volumeMounts:
           - mountPath: /config
             name: config
+          - mountPath: /data
+            name: data
       volumes:
       - name: config
         configMap:
           name: traefik-configmap
+      - name: data
+        nfs:
+          server: 192.168.2.41
+          path: /data/traefik
 
 ---
 kind: Service

@@ -1,9 +1,11 @@
 ---
-- tasks:
+- hosts: all
+
+  tasks:
 
   - name: stop docker and kubelet
     systemd:
-      name: {{ item }}
+      name: "{{ item }}"
       state: stopped
     with_items:
     - docker
@@ -16,7 +18,7 @@
 
   - name: start docker and kubelet
     systemd:
-      name: {{ item }}
+      name: "{{ item }}"
       state: started
     with_items:
     - docker

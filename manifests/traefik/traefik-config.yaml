@@ -16,8 +16,8 @@ data:
     [entryPoints]
       [entryPoints.http]
       address = ":80"
-        # [entryPoints.http.redirect]
-        # entryPoint = "https"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
       [entryPoints.https]
       address = ":443"
         [entryPoints.https.tls]
@@ -32,15 +32,16 @@ data:
 
     [acme]
     email = "traefik@jeef.me"
-    storage = "acme.json"
+    storage = "/data/acme.json"
     entryPoint = "https"
     onHostRule = true
     acmeLogging = true
     [[acme.domains]]
-    main = "jeef.me"
-    sans = ["*.jeef.me"]
+    main = "*.jeef.me"
+    # sans = ["*.jeef.me"]
     # [acme.httpChallenge]
     # entryPoint = "http"
     [acme.dnsChallenge]
     provider = "digitalocean"
+    delayBeforeCheck = 30
 
