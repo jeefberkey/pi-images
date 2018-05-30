@@ -6,6 +6,8 @@ metadata:
   namespace: kube-system
   annotations:
     kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "basic"
+    ingress.kubernetes.io/auth-secret: "dashboard-htaccess"
 spec:
   rules:
   - host: grafana.jeef.me

@@ -13,3 +13,4 @@ provisioning/bootconf/*
 !provisioning/bootconf/zero-config.txt
 
 **/secrets.yaml
+**/kubernetes-dashboard
