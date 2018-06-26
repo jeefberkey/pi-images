@@ -20,12 +20,12 @@ spec:
       serviceAccountName: heapster
       containers:
       - name: heapster
-        image: k8s.gcr.io/heapster-arm:v1.4.2
+        image: k8s.gcr.io/heapster-arm:v1.5.3
         imagePullPolicy: IfNotPresent
         command:
         - /heapster
         - --source=kubernetes:https://kubernetes.default
-        - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086
+        - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086?retention=30d
 ---
 apiVersion: v1
 kind: Service

@@ -19,7 +19,7 @@
   - name: install the dang packages
     apt: name={{item}} state=present
     with_items:
-      - kubelet=1.10.2-00 # 1.10.3 has issues on arm
+      - kubelet
       - kubeadm
       - kubectl
       - nfs-common
