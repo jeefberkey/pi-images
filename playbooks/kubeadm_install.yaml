@@ -22,7 +22,8 @@
       - kubelet
       - kubeadm
       - kubectl
-      - nfs-common
+      - nfs-common # storage backend
+      - ipset # for weave
 
   - name: lock the kubelet package to prevent update
     shell: apt-mark hold kubelet

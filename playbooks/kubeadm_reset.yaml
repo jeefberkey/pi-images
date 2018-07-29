@@ -4,7 +4,7 @@
   tasks:
 
   - name: run kubeadm
-    shell: kubeadm reset
+    shell: kubeadm reset --force
 
   - name: flush iptables
     # https://blog.heptio.com/properly-resetting-your-kubeadm-bootstrapped-cluster-nodes-heptioprotip-473bd0b824aa
