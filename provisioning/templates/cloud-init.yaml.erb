@@ -18,20 +18,5 @@ users:
   ssh-authorized-keys:
   - <%= File.read(File.expand_path('~/.ssh/id_rsa.pub')).chomp %>
 
-# resize_rootfs: true
-# growpart:
-#   mode: auto
-#   devices: ["/"]
-#   ignore_growroot_disabled: false
-
-# package_update: true
-# package_upgrade: true
-# package_reboot_if_required: true
-
-packages:
-- vim
-- git
-- htop
-
 locale: "en_US.UTF-8"
 timezone: "America/New_York"
