@@ -1,0 +1,7 @@
+---
+- hosts: all
+
+  tasks:
+  - apt: name=rpi-update state=present
+
+  - shell: RPI_REBOOT=1 rpi-update

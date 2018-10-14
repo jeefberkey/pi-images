@@ -18,7 +18,7 @@ spec:
       # https://github.com/jeefberkey/octobox/blob/docker-arm/docker_build.sh
       # you have to rebuild the container, because arm
       - name: octobox
-        image: us.gcr.io/jeefme-185614/octobox@sha256:ae720d2b48605ba8259d0ca6dd49c8b8937eaf78529c67caac21cf3b77e98289
+        image: us.gcr.io/jeefme-185614/octobox:31c4668
         # image: us.gcr.io/jeefme-185614/octobox:latest
         imagePullPolicy: Always
         ports:

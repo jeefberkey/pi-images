@@ -26,7 +26,11 @@
       - ipset # for weave
 
   - name: lock the kubelet package to prevent update
-    shell: apt-mark hold kubelet
+    shell: apt-mark hold {{item}}
+    with_items:
+      - kubelet
+      - kubeadm
+      - kubectl
 
   - name: this kernel module is required
     modprobe:
