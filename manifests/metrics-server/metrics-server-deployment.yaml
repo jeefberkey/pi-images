@@ -23,12 +23,20 @@ spec:
         k8s-app: metrics-server
     spec:
       serviceAccountName: metrics-server
+      volumes:
+      # mount in tmp so we can safely use from-scratch images and/or read-only containers
+      - name: tmp-dir
+        emptyDir: {}
       containers:
       - name: metrics-server
-        image: gcr.io/google_containers/metrics-server-arm:v0.2.1
+        image: k8s.gcr.io/metrics-server-arm:v0.3.1
         imagePullPolicy: Always
+        volumeMounts:
+        - name: tmp-dir
+          mountPath: /tmp
         command:
         - /metrics-server
-        - --source=kubernetes.summary_api:''
+        # - --source=kubernetes.summary_api:''
         - --enable-swagger-ui
+        - --logtostderr
         # - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086

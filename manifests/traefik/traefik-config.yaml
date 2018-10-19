@@ -12,7 +12,8 @@ data:
     logLevel = "INFO"
 
     # Do not verify backend certificates (use https backends)
-    # InsecureSkipVerify = true
+    insecureSkipVerify = true
+
     [entryPoints]
       [entryPoints.http]
       address = ":80"
@@ -44,4 +45,3 @@ data:
     [acme.dnsChallenge]
     provider = "digitalocean"
     delayBeforeCheck = 30
-

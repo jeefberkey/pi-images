@@ -20,12 +20,13 @@ spec:
       serviceAccountName: heapster
       containers:
       - name: heapster
-        image: k8s.gcr.io/heapster-arm:v1.5.3
+        image: k8s.gcr.io/heapster-arm:v1.5.4
         imagePullPolicy: IfNotPresent
         command:
         - /heapster
         - --source=kubernetes:https://kubernetes.default
-        - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086?retention=30d
+        # - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086?retention=30d
+        - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +35,7 @@ metadata:
     task: monitoring
     # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
     # If you are NOT using this as an addon, you should comment out this line.
-    kubernetes.io/cluster-service: 'true'
+    # kubernetes.io/cluster-service: 'true'
     kubernetes.io/name: Heapster
   name: heapster
   namespace: kube-system
