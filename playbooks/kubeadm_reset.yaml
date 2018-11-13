@@ -15,5 +15,5 @@
       name: /etc/cni/net.d
       state: absent
 
-  - name: reboot
-    shell: reboot && sleep 1
+  # - name: reboot
+  #   shell: reboot && sleep 1

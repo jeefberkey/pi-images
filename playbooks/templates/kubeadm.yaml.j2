@@ -7,11 +7,10 @@ api:
 clusterName: pi.jeef.me
 networking:
   podSubnet: 10.244.0.0/16
+  dnsDomain: pi.jeef.me
 auditPolicy:
   logDir: /var/log/kubernetes/audit
   logMaxAge: 2
   path: ""
-# featureGates:
-#   PersistentLocalVolumes: true
-#   VolumeScheduling: true
-#   MountPropagation: true
+featureGates:
+  DynamicKubeletConfig: true

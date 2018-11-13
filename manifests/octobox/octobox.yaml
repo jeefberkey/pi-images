@@ -18,15 +18,15 @@ spec:
       # https://github.com/jeefberkey/octobox/blob/docker-arm/docker_build.sh
       # you have to rebuild the container, because arm
       - name: octobox
-        image: us.gcr.io/jeefme-185614/octobox:31c4668
-        # image: us.gcr.io/jeefme-185614/octobox:latest
+        # image: us.gcr.io/jeefme-185614/octobox:31c4668
+        image: us.gcr.io/jeefme-185614/octobox:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
           protocol: TCP
         livenessProbe:
           initialDelaySeconds: 30
-          timeoutSeconds: 8
+          timeoutSeconds: 20
           periodSeconds: 300
           httpGet:
             path: /
@@ -45,8 +45,8 @@ spec:
               key: password
         - name: OCTOBOX_DATABASE_HOST
           value: postgresql
-        - name: REDIS_URL
-          value: redis
+        # - name: REDIS_URL
+        #   value: redis
         - name: MINIMUM_REFRESH_INTERVAL
           value: "5"
         - name: PERSONAL_ACCESS_TOKENS_ENABLED
@@ -70,6 +70,21 @@ spec:
             secretKeyRef:
               name: oauth
               key: client_secret
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: app_id
+        - name: GITHUB_APP_SLUG
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: app_slug
+        - name: GITHUB_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: webhook_secret
 
 ---
 apiVersion: v1

@@ -23,9 +23,10 @@
       - kubeadm
       - kubectl
       - nfs-common # storage backend
-      - ipset # for weave
+      # - ipset # for weave
+      - cadvisor # for monitoring
 
-  - name: lock the kubelet package to prevent update
+  - name: lock the kube packages to prevent update
     shell: apt-mark hold {{item}}
     with_items:
       - kubelet

@@ -39,4 +39,5 @@ spec:
         # - --source=kubernetes.summary_api:''
         - --enable-swagger-ui
         - --logtostderr
+        - --kubelet-insecure-tls
         # - --sink=influxdb:http://monitoring-influxdb.kube-system.svc:8086

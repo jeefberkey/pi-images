@@ -1,0 +1,16 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: unlock the kubelet package to allow update
+    shell: apt-mark unhold {{item}}
+    with_items:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+  - name: upgrade the packages
+    apt:
+      name: ['kubelet','kubeadm','kubectl']
+      state: latest
