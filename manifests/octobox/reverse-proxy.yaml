@@ -13,4 +13,4 @@ spec:
       paths:
       - backend:
           serviceName: octobox
-          servicePort: 3000
+          servicePort: 5000

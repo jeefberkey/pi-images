@@ -17,14 +17,15 @@
       update_cache: yes
 
   - name: install the dang packages
-    apt: name={{item}} state=present
-    with_items:
-      - kubelet
-      - kubeadm
-      - kubectl
-      - nfs-common # storage backend
-      # - ipset # for weave
-      - cadvisor # for monitoring
+    apt:
+      state: present
+      name:
+        - kubelet
+        - kubeadm
+        - kubectl
+        - nfs-common # storage backend
+        # - ipset # for weave
+        - cadvisor # for monitoring
 
   - name: lock the kube packages to prevent update
     shell: apt-mark hold {{item}}
