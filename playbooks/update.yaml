@@ -2,10 +2,15 @@
 - hosts: all
 
   tasks:
-  - apt:
-      update_cache: yes
-      upgrade: yes
+
+  - name: install key for hypriot
+    apt_key:
+      url: https://packagecloud.io/Hypriot/rpi/gpgkey
 
   - apt:
       name: ['vim','git','htop']
       state: present
+
+  - apt:
+      update_cache: yes
+      upgrade: yes

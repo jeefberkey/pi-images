@@ -1,16 +1,21 @@
 ---
-apiVersion: kubeadm.k8s.io/v1alpha2
-kind: MasterConfiguration
-api:
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+localAPIEndpoint:
   advertiseAddress: {{ ansible_eth0.ipv4.address }}
   bindPort: 443
-clusterName: pi.jeef.me
+# nodeRegistration:
+  # criSocket: /var/run/crio/crio.sock
+  # kubeletExtraArgs:
+    # container-runtime: remote
+    # container-runtime-endpoint: /var/run/crio/crio.sock
+    # cgroup-driver: systemd
+    # runtime-request-timeout: 5m
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
 networking:
   podSubnet: 10.244.0.0/16
   dnsDomain: pi.jeef.me
-auditPolicy:
-  logDir: /var/log/kubernetes/audit
-  logMaxAge: 2
-  path: ""
-featureGates:
-  DynamicKubeletConfig: true
+clusterName: pi.jeef.me
+kubernetesVersion: v1.13.0

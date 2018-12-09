@@ -1,5 +1,6 @@
 ---
-- hosts: raspi1.pi.jeef.me
+# - hosts: raspi1.pi.jeef.me
+- hosts: all
 
   tasks:
 

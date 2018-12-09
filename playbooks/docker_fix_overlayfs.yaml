@@ -11,6 +11,9 @@
     - docker
     - kubelet
 
+  - name: umount it
+    shell: umount /var/lib/docker/overlay2
+
   - name: remove docker data dir
     file:
       name: /var/lib/docker

@@ -1,0 +1,44 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: install key for the ubuntu projectatomic ppa
+    apt_key:
+      url: https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0x8BECF1637AD8C79D
+      state: absent
+
+  - name: install the ubuntu projectatomic ppa
+    apt_repository:
+      # current is stretch
+      repo: deb http://ppa.launchpad.net/projectatomic/ppa/ubuntu xenial main
+      state: absent
+      filename: docker
+
+  - systemd:
+      daemon_reload: yes
+      name: crio
+      state: stopped
+      enabled: yes
+
+  - name: uninstall old cri-o
+    apt:
+      state: absent
+      name:
+        - cri-o-1.11
+
+  - name: uninstall cri-o
+    apt:
+      state: absent
+      name:
+        - cri-o-1.12
+        # - iproute
+        # - socat
+
+  - name: delete old stuff
+    file:
+      state: absent
+      path:
+      - /etc/systemd/system/kubelet.service.d/20-cri.conf
+      - /etc/cni/net.d
+      - /etc/crio

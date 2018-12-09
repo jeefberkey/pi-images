@@ -1,0 +1,18 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: install the docker.io
+    apt:
+      name: docker.io
+      state: present
+      force: true
+
+  - name: lock the docker-ce package to prevent update
+    shell: apt-mark hold docker.io
+
+  - systemd:
+      daemon_reload: yes
+      name: docker
+      state: restarted

@@ -1,0 +1,17 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: remove docker-ce
+    apt:
+      name:
+      - docker-ce
+      - docker.io
+      state: absent
+      force: true
+
+  - name: remove all docker repos
+    file:
+      name: /etc/apt/sources.list.d/docker.list
+      state: absent

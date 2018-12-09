@@ -55,22 +55,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: metallb-system
-  name: leader-election
-  labels:
-    app: metallb
-rules:
-- apiGroups: [""]
-  resources: ["endpoints"]
-  resourceNames: ["metallb-speaker"]
-  verbs: ["get", "update"]
-- apiGroups: [""]
-  resources: ["endpoints"]
-  verbs: ["create"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: metallb-system
   name: config-watcher
   labels:
     app: metallb
@@ -131,21 +115,6 @@ roleRef:
   kind: Role
   name: config-watcher
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  namespace: metallb-system
-  name: leader-election
-  labels:
-    app: metallb
-subjects:
-- kind: ServiceAccount
-  name: speaker
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: leader-election
----
 apiVersion: apps/v1beta2
 kind: DaemonSet
 metadata:
@@ -190,6 +159,7 @@ spec:
           limits:
             cpu: 100m
             memory: 100Mi
+
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -198,6 +168,8 @@ spec:
             - all
             add:
             - net_raw
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
 
 ---
 apiVersion: apps/v1beta2
@@ -228,6 +200,8 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534 # nobody
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
       - name: controller
         image: metallb/controller:master
@@ -242,11 +216,10 @@ spec:
           limits:
             cpu: 100m
             memory: 100Mi
+
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
             drop:
             - all
           readOnlyRootFilesystem: true
-
----

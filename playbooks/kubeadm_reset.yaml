@@ -10,10 +10,10 @@
     # https://blog.heptio.com/properly-resetting-your-kubeadm-bootstrapped-cluster-nodes-heptioprotip-473bd0b824aa
     shell: iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 
-  - name: remove old cni config
-    file:
-      name: /etc/cni/net.d
-      state: absent
+  # - name: remove old cni config
+  #   file:
+  #     name: /etc/cni/net.d
+  #     state: absent
 
   # - name: reboot
   #   shell: reboot && sleep 1

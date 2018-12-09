@@ -24,8 +24,9 @@
         - kubeadm
         - kubectl
         - nfs-common # storage backend
-        # - ipset # for weave
-        - cadvisor # for monitoring
+        # - strongswan
+        # - strongswan-swanctl
+        # - strongswan-ikev2
 
   - name: lock the kube packages to prevent update
     shell: apt-mark hold {{item}}
@@ -62,37 +63,3 @@
       value: 1
       state: present
       sysctl_set: yes
-
-  # - name: disable docker0
-  #   shell: ip link set docker0 down
-
-  # - name: setup flex volumes ? for rook
-  #   copy:
-  #     content: |
-  #       [Service]
-  #       # Environment="KUBELET_EXTRA_ARGS=--volume-plugin-dir=/var/lib/kubelet/volumeplugins"
-  #       Environment="KUBE_FEATURE_GATES=PersistentLocalVolumes=true,VolumeScheduling=true,MountPropagation=true"
-  #     dest: /etc/systemd/system/kubelet.service.d/09-overrides.conf
-
-  # - name: create cni dir
-  #   file:
-  #     path: "{{ item }}"
-  #     state: directory
-  #   with_items:
-  #     - /etc/cni
-  #     - /etc/cni/net.d
-
-  # - name: flannel config
-  #   copy:
-  #     content: |
-  #       {
-  #         "name": "kube-pi-net",
-  #         "type": "flannel"
-  #       }
-  #     dest: /etc/cni/net.d/10-flannel.conf
-
-  # - name: enable the service
-  #   service:
-  #     name: kubelet
-  #     state: started
-  #     enabled: true

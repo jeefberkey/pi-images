@@ -4,11 +4,12 @@
   tasks:
 
   - name: install deps
-    apt: name={{item}} state=present
-    with_items:
-    - nfs-kernel-server
-    - nfs-common
-    - portmap
+    apt:
+      state: present
+      name:
+        - nfs-kernel-server
+        - nfs-common
+        - portmap
 
   - name: mount flash drive as /data
     mount:

@@ -1,0 +1,110 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: install key for the ubuntu projectatomic ppa
+    apt_key:
+      url: https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0x8BECF1637AD8C79D
+
+  - name: install the ubuntu projectatomic ppa
+    apt_repository:
+      # current is stretch
+      repo: deb http://ppa.launchpad.net/projectatomic/ppa/ubuntu xenial main
+      state: present
+      filename: docker
+
+  - name: update apt cache because you have to do this on debian
+    apt:
+      update_cache: yes
+
+  - name: uninstall old cri-o
+    apt:
+      state: absent
+      name:
+        - cri-o-1.11
+
+  - name: install cri-o
+    apt:
+      state: present
+      name:
+        - cri-o-1.12
+        # - iproute
+        # - socat
+
+  - name: this kernel module is required
+    modprobe:
+      name: br_netfilter
+      state: present
+
+  - name: also this one
+    modprobe:
+      name: overlay
+      state: present
+
+  - name: more sysctl stuff
+    sysctl:
+      name: net.bridge.bridge-nf-call-iptables
+      value: 1
+      state: present
+      sysctl_set: yes
+
+  - name: more6 sysctl stuff
+    sysctl:
+      name: net.bridge.bridge-nf-call-ip6tables
+      value: 1
+      state: present
+      sysctl_set: yes
+
+  - name: even more sysctl stuff
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      state: present
+      sysctl_set: yes
+
+  - name: clean up cri-o config file
+    shell: sed -i '/^  /d' /etc/crio/crio.conf
+
+  - name: set cri-o runtime
+    ini_file:
+      path: /etc/crio/crio.conf
+      section: crio.runtime.runtimes.runc
+      option: runtime_path
+      value: '"/usr/lib/cri-o-runc/sbin/runc"'
+
+  - name: dropin for kubelet
+    copy:
+      dest: /etc/systemd/system/kubelet.service.d/20-cri.conf
+      content: |
+        # [Service]
+        # Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock --runtime-request-timeout=5m"
+        # EOF
+
+  - name: create cni dir
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - /etc/cni
+      - /etc/cni/net.d
+
+  - name: flannel config
+    copy:
+      dest: /etc/cni/net.d/10-flannel.conf
+      content: |
+        {
+          "name": "kube-pi-net",
+          "type": "flannel"
+        }
+
+  - systemd:
+      daemon_reload: yes
+      name: crio
+      state: restarted
+      enabled: yes
+
+  - systemd:
+      name: kubelet
+      state: restarted
+      enabled: yes
