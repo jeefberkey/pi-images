@@ -7,6 +7,7 @@
     systemd:
       name: "{{ item }}"
       state: stopped
+      enabled: false
     with_items:
     - docker
     - kubelet
@@ -23,6 +24,7 @@
     systemd:
       name: "{{ item }}"
       state: started
+      enabled: true
     with_items:
     - docker
     - kubelet

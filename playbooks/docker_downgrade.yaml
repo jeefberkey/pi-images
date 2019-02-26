@@ -23,7 +23,8 @@
   # https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.9.md#external-dependencies
   - name: install the last supported version of docker-ce
     apt:
-      name: docker-ce=17.03.2~ce-0~ubuntu-xenial
+      name: docker-ce=18.06.1~ce~3-0~ubuntu
+      # name: docker-ce=17.03.2~ce-0~ubuntu-xenial
       state: present
       force: true
 
@@ -34,4 +35,3 @@
       daemon_reload: yes
       name: docker
       state: restarted
-

@@ -18,11 +18,10 @@ spec:
       # https://github.com/jeefberkey/octobox/blob/docker-arm/docker_build.sh
       # you have to rebuild the container, because arm
       - name: octobox
-        # image: us.gcr.io/jeefme-185614/octobox:31c4668
         image: us.gcr.io/jeefme-185614/octobox:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000
+        - containerPort: 3000
           protocol: TCP
         livenessProbe:
           initialDelaySeconds: 30
@@ -30,9 +29,11 @@ spec:
           periodSeconds: 300
           httpGet:
             path: /
-            port: 5000
+            port: 3000
+            # scheme: HTTPS
         env:
         - name: RAILS_ENV
+          # value: production
           value: development
         - name: OCTOBOX_DATABASE_NAME
           value: postgres
@@ -50,8 +51,12 @@ spec:
         - name: MINIMUM_REFRESH_INTERVAL
           value: "5"
         - name: PERSONAL_ACCESS_TOKENS_ENABLED
-          value: "1"
+          value: "0"
         - name: RAILS_LOG_TO_STDOUT
+          value: "yes"
+        - name: RAILS_SERVE_STATIC_FILES
+          value: "yes"
+        - name: FORCE_SSL
           value: "yes"
         - name: FETCH_SUBJECT
           value: "true"
@@ -59,6 +64,10 @@ spec:
           value: "true"
         - name: OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED
           value: "true"
+        - name: PUSH_NOTIFICATIONS
+          value: "true"
+        - name: WEBSOCKET_ALLOWED_ORIGINS
+          value: https://octobox.jeef.me,http://octobox.jeef.me,http://localhost,https://localhost
         # ocotobox issues with arm
         # bootsnap issue https://github.com/Shopify/bootsnap/issues/67
         # ruby issue https://bugs.ruby-lang.org/issues/13670
@@ -89,6 +98,16 @@ spec:
             secretKeyRef:
               name: oauth
               key: webhook_secret
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: oauth
+              key: secret_key_base
+        # - name: OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: oauth
+        #       key: attribute_encryption_key
 
 ---
 apiVersion: v1
@@ -101,8 +120,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 5000
-    targetPort: 5000
+  - port: 3000
+    targetPort: 3000
     protocol: TCP
   selector:
     app: octobox

@@ -13,6 +13,8 @@ data:
 
     # Do not verify backend certificates (use https backends)
     insecureSkipVerify = true
+    enablePassTLSCert = true
+    passHostHeader = true
 
     [entryPoints]
       [entryPoints.http]

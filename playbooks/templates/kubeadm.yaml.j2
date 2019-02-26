@@ -4,6 +4,12 @@ kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ ansible_eth0.ipv4.address }}
   bindPort: 443
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: raspi1
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
 # nodeRegistration:
   # criSocket: /var/run/crio/crio.sock
   # kubeletExtraArgs:

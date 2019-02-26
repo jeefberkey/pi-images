@@ -8,7 +8,7 @@
       url: https://packagecloud.io/Hypriot/rpi/gpgkey
 
   - apt:
-      name: ['vim','git','htop']
+      name: ['vim','git','htop','tree']
       state: present
 
   - apt:

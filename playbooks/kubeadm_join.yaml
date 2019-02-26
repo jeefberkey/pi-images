@@ -4,4 +4,4 @@
   tasks:
 
   - name: run kubeadm
-    shell: kubeadm join 192.168.2.40:443 --token 8zfihk.vlrj1huvkitnv6qw --discovery-token-ca-cert-hash sha256:66b45fcafba93a38c107595906be269710ad9881959385963321d955b41b3cbe
+    shell: kubeadm join 192.168.2.40:443 --ignore-preflight-errors=SystemVerification --token 549xgb.1zqdl5my64932khe --discovery-token-ca-cert-hash sha256:c009ea6eaa515ed99e18f93c99785090c9386da1b94be6d3c808d1a5c6f791a2

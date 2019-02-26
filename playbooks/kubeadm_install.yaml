@@ -24,9 +24,9 @@
         - kubeadm
         - kubectl
         - nfs-common # storage backend
-        # - strongswan
-        # - strongswan-swanctl
-        # - strongswan-ikev2
+        - aufs-dev
+        - aufs-tools
+        - aufs-dkms
 
   - name: lock the kube packages to prevent update
     shell: apt-mark hold {{item}}

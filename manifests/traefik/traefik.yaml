@@ -29,9 +29,17 @@ spec:
       - image: traefik:latest
         name: traefik-ingress-lb
         imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        - name: admin
+          containerPort: 8080
         args:
         - --api
         - --kubernetes
+        - --logLevel=INFO
         - --configfile=/config/traefik.toml
         env:
         - name: DO_AUTH_TOKEN
@@ -63,13 +71,13 @@ spec:
   selector:
     k8s-app: traefik-ingress-lb
   ports:
-    - protocol: TCP
-      port: 80
-      name: http
-    - protocol: TCP
-      port: 443
-      name: https
-    - protocol: TCP
-      port: 8080
-      name: admin
+  - protocol: TCP
+    port: 80
+    name: web
+  - protocol: TCP
+    port: 80
+    name: secure web
+  - protocol: TCP
+    port: 8080
+    name: admin
   type: LoadBalancer
