@@ -4,6 +4,8 @@ Gemfile.lock
 .log/
 .cp/
 src/
+vendor
+.bundle
 
 images/*.zip
 **/*.retry

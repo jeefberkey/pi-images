@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jeef.me
+  namespace: index
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.priority: "1"
+spec:
+  rules:
+  - host: "*.jeef.me"
+    http:
+      paths:
+      - backend:
+          serviceName: index
+          servicePort: 80
+  - host: jeef.me
+    http:
+      paths:
+      - backend:
+          serviceName: index
+          servicePort: 80

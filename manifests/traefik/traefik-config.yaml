@@ -16,34 +16,44 @@ data:
     enablePassTLSCert = true
     passHostHeader = true
 
+    [kubernetes]
+
     [entryPoints]
+      [entrypoints.dashboard]
+      address = ":8080"
       [entryPoints.http]
       address = ":80"
         [entryPoints.http.redirect]
         entryPoint = "https"
       [entryPoints.https]
       address = ":443"
-        [entryPoints.https.tls]
+      [entryPoints.https.tls]
 
-    [web]
-      address = ":8080"
+    # dashboard
+    [api]
+    entryPoint = "dashboard"
+    dashboard = true
 
-    [kubernetes]
-
+    # https://<domain>/ping
     [ping]
     entryPoint = "http"
 
+    [metrics]
+      [metrics.prometheus]
+      entryPoint = "dashboard"
+
+    # Let's Encrypt SSL certs
     [acme]
-    email = "traefik@jeef.me"
-    storage = "/data/acme.json"
-    entryPoint = "https"
-    onHostRule = true
-    acmeLogging = true
-    [[acme.domains]]
-    main = "*.jeef.me"
-    # sans = ["*.jeef.me"]
-    # [acme.httpChallenge]
-    # entryPoint = "http"
-    [acme.dnsChallenge]
-    provider = "digitalocean"
-    delayBeforeCheck = 30
+      email = `"traefik@jeef.me"
+      storage = "/data/acme.json"
+      entryPoint = "https"
+      onHostRule = true
+      acmeLogging = true
+        [[acme.domains]]
+        main = "*.jeef.me"
+        # sans = ["*.jeef.me"]
+        # [acme.httpChallenge]
+        # entryPoint = "http"
+      [acme.dnsChallenge]
+      provider = "digitalocean"
+      delayBeforeCheck = 30

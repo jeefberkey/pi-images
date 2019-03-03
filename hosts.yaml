@@ -3,30 +3,23 @@ all:
   children:
     pis:
       hosts:
-        raspi1.pi.jeef.me:
+        raspi1:
           mac: b8:27:eb:2c:7f:63
-        raspi2.pi.jeef.me:
+        raspi2:
           mac: b8:27:eb:cc:31:84
-        raspi3.pi.jeef.me:
+        raspi3:
           mac: b8:27:eb:db:7f:5b
-        raspi4.pi.jeef.me:
+        raspi4:
           mac: b8:27:eb:fe:1a:be
-        raspi5.pi.jeef.me:
+        raspi5:
           mac: b8:27:eb:60:ae:e4
-    # zeros:
-    #   hosts:
-    #     zero1.pi.jeef.me:
-    #       dev_mac: b8:27:eb:35:fb:a1
-    #       host_mac: b8:27:eb:35:fb:b1
-    #     zero2.pi.jeef.me:
-    #       dev_mac: b8:27:eb:35:fb:a2
-    #       host_mac: b8:27:eb:35:fb:b2
-    #     zero3.pi.jeef.me:
-    #       dev_mac: b8:27:eb:35:fb:a3
-    #       host_mac: b8:27:eb:35:fb:b3
-    #     zero4.pi.jeef.me:
-    #       dev_mac: b8:27:eb:35:fb:a4
-    #       host_mac: b8:27:eb:35:fb:b4
-    #     zero5.pi.jeef.me:
-    #       dev_mac: b8:27:eb:35:fb:a5
-    #       host_mac: b8:27:eb:35:fb:b5
+        # raspi1.pi.jeef.me:
+        #   mac: b8:27:eb:2c:7f:63
+        # raspi2.pi.jeef.me:
+        #   mac: b8:27:eb:cc:31:84
+        # raspi3.pi.jeef.me:
+        #   mac: b8:27:eb:db:7f:5b
+        # raspi4.pi.jeef.me:
+        #   mac: b8:27:eb:fe:1a:be
+        # raspi5.pi.jeef.me:
+        #   mac: b8:27:eb:60:ae:e4

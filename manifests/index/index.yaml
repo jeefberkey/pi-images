@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: index
+  name: index
+  labels:
+    app: index
+spec:
+  selector:
+    matchLabels:
+      app: index
+  template:
+    metadata:
+      labels:
+        app: index
+    spec:
+      containers:
+      - name: index
+        image: nginx
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        # livenessProbe:
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 20
+        #   periodSeconds: 300
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        # env:
+        # - name: RAILS_ENV
+        #   value: development
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: index
+  name: index
+  labels:
+    app: index
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: index
