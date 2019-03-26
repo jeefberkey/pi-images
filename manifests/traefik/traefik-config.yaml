@@ -19,19 +19,18 @@ data:
     [kubernetes]
 
     [entryPoints]
-      [entrypoints.dashboard]
-      address = ":8080"
       [entryPoints.http]
       address = ":80"
         [entryPoints.http.redirect]
         entryPoint = "https"
       [entryPoints.https]
       address = ":443"
-      [entryPoints.https.tls]
+        [entryPoints.https.tls]
+      [entrypoints.metrics]
+      address = ":8081"
 
     # dashboard
     [api]
-    entryPoint = "dashboard"
     dashboard = true
 
     # https://<domain>/ping
@@ -40,11 +39,11 @@ data:
 
     [metrics]
       [metrics.prometheus]
-      entryPoint = "dashboard"
+      entryPoint = "metrics"
 
     # Let's Encrypt SSL certs
     [acme]
-      email = `"traefik@jeef.me"
+      email = "traefik@jeef.me"
       storage = "/data/acme.json"
       entryPoint = "https"
       onHostRule = true

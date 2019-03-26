@@ -1,0 +1,28 @@
+---
+- hosts: all
+
+  tasks:
+
+  # - name: ensure log2ram is stopped
+  #   systemd:
+  #     name: log2ram
+  #     state: stopped
+
+  # - name: download the tar
+  #   get_url:
+  #     url: https://github.com/azlux/log2ram/archive/master.tar.gz
+  #     dest: /tmp/log2ram.tar.gz
+
+  - name: download and unpack the tar
+    unarchive:
+      src: https://github.com/azlux/log2ram/archive/master.tar.gz
+      dest: /tmp/
+      remote_src: yes
+
+  - name: run the installer script
+    shell: chmod +x install.sh && ./install.sh
+    args:
+      chdir: /tmp/log2ram-master
+
+  - name: restart the system to properly start log2ram
+    reboot:

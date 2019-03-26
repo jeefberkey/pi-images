@@ -2,6 +2,9 @@
 - hosts: all
 
   tasks:
-  - apt: name=rpi-update state=present
+  - apt: name=rpi-update state=latest
 
-  - shell: RPI_REBOOT=1 rpi-update
+  # - shell: RPI_REBOOT=1 rpi-update
+  - shell: rpi-update
+
+  - reboot:
